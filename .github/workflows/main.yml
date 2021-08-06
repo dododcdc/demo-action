@@ -50,7 +50,7 @@ jobs:
             str=`ps -ef | grep demo-action`
             arr=($str)
             proc=${arr[1]}
-            kill -9 proc
+            kill -9 $proc
             cd wb/actions/ && java -jar demo-action-0.0.1-SNAPSHOT.jar &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.SSH_USER }}
