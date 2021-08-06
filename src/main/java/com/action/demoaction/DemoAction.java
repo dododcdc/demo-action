@@ -9,6 +9,6 @@ public class DemoAction {
 
     @GetMapping("/action")
     public String doAction() {
-        return "success";
+        return "action";
     }
 }
