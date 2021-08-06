@@ -8,6 +8,6 @@ public class DemoAction {
 
     @GetMapping("/action")
     public String doAction() {
-        return "xxxxxxxxx";
+        return "MMMMMMMMMM";
     }
 }
