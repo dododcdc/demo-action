@@ -10,4 +10,5 @@ public class DemoAction {
     public String urls() {
         return "https://goodbin.cn/videos/v4.mp4";
     }
+
 }
