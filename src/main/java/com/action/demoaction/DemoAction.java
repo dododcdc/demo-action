@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoAction {
 
-    @GetMapping("/getUrls")
-    public String getUrls() {
+    @GetMapping("/urls")
+    public String urls() {
         return "https://goodbin.cn/videos/v4.mp4";
     }
 }
