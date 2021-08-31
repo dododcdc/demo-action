@@ -8,6 +8,6 @@ public class DemoAction {
 
     @GetMapping("/action")
     public String doAction() {
-        return "MMMMMMMMMM";
+        return "https://goodbin.cn/videos/v4.mp4";
     }
 }
