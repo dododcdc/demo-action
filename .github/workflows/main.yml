@@ -37,8 +37,8 @@ jobs:
       - name: 将 JAR 包部署到服务器
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: target/demo-action-0.0.1-SNAPSHOT.jar
-          remote: wb/actions/demo-action-0.0.1-SNAPSHOT.jar
+          local: target/demo-action.jar
+          remote: wb/actions/demo-action.jar
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
@@ -51,7 +51,7 @@ jobs:
             arr=($str)
             proc=${arr[1]}
             kill -9 $proc
-            cd wb/actions/ && nohup java -jar demo-action-0.0.1-SNAPSHOT.jar > demo-action.log 2>&1 &
+            cd wb/actions/ && nohup java -jar demo-action.jar > demo-action.log 2>&1 &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.SSH_USER }}
           pass: ${{ secrets.SSH_PASSWORD }}
