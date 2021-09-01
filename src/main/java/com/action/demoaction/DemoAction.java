@@ -16,7 +16,6 @@ public class DemoAction {
 
     @GetMapping("/home")
     public String home() {
-        return "home";
+        return "index";
     }
-
 }
