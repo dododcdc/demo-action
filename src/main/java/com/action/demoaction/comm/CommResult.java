@@ -9,6 +9,21 @@ public class CommResult {
     public CommResult() {
     }
 
+    public static CommResult success() {
+        return new CommResult("200","成功",null);
+    }
+
+    public static CommResult success(Object o) {
+        return new CommResult("200","成功",o);
+    }
+
+    public static CommResult fail() {
+        return new CommResult("500","失败",null);
+    }
+    public static CommResult fail(String msg) {
+        return new CommResult("500",msg,null);
+    }
+
     public CommResult(String code, String msg, Object data) {
         this.code = code;
         this.msg = msg;

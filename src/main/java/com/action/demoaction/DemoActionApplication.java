@@ -1,5 +1,7 @@
 package com.action.demoaction;
 
+import com.action.demoaction.config.Apple;
+import com.action.demoaction.config.FoodConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +13,11 @@ public class DemoActionApplication implements CommandLineRunner {
 
     @Autowired
     IFoo iFoo ;
+    @Autowired
+    Apple apple;
+
+    @Autowired
+    FoodConfig foodConfig;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoActionApplication.class, args);
@@ -24,5 +31,8 @@ public class DemoActionApplication implements CommandLineRunner {
         annotationConfigApplicationContext.refresh();
         annotationConfigApplicationContext.getBean(IFoo.class);
         iFoo.say();
+        System.out.println(apple.getColor());
+        System.out.println(foodConfig.apple.getColor());
+
     }
 }
