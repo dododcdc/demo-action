@@ -24,6 +24,13 @@ public class DemoAction {
         return "index";
     }
 
+    @GetMapping("/xd")
+    public String xd() {
+        return "study";
+    }
+
+
+
 
     @ResponseBody
     @PostMapping("/test")

@@ -25,7 +25,9 @@ public class StudyAction {
 
     @GetMapping("/study")
     public CommResult study(String userName,String password)  {
-        log.info("study接口被访问");
+        log.info("study接口被访问" );
+        log.info(userName);
+        log.info(password);
         try {
 //            String username = user.getUserName();
 //            String password = user.getPassword();
