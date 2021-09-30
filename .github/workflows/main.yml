@@ -51,7 +51,7 @@ jobs:
             arr=($str)
             proc=${arr[1]}
             kill -9 $proc
-            cd wb/actions/ && nohup java -jar demo-action.jar > demo-action.log 2>&1 &
+            cd wb/actions/ && nohup java -jar demo-action.jar 2>&1 &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.SSH_USER }}
           pass: ${{ secrets.SSH_PASSWORD }}

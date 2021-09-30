@@ -4,7 +4,6 @@ import com.action.demoaction.comm.httpres.Course;
 import com.action.demoaction.comm.httpres.CourseBody;
 import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
-import com.ejlchina.okhttps.HTTP;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ public class StudyServiceImpl implements StudyService {
 
     private final String urlWatch = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do?yCourseKnowledgeStudy&id=";
 
-    private HTTP http = HTTP.builder().build();
 
     private Map<String,String> cookies = new HashMap<>();
 

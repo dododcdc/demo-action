@@ -27,16 +27,6 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.ejlchina</groupId>
-            <artifactId>okhttps-fastjson</artifactId>
-            <version>3.1.5</version>
-        </dependency>
-
-
-
-
-
 
 
 
