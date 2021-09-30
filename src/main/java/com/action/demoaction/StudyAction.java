@@ -25,7 +25,7 @@ public class StudyAction {
     public CommResult study(String username ,String pwd)  {
         try {
             studyService.login(username,pwd);
-            List<XukeBody> xukes = studyService.getXukes();
+            List<XukeBody> xukes = studyService.getXukes(username);
             System.out.println("gg");
 
         } catch (Exception e) {

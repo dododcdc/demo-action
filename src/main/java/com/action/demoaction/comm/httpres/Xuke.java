@@ -7,11 +7,14 @@ public class Xuke {
 
     private String total;
 
-    private List<XukeBody> rows ;
+    private List<XukeBody> rows = new ArrayList<>();
 
     public Xuke(String total, List<XukeBody> rows) {
         this.total = total;
-        this.rows = new ArrayList<>();
+        this.rows = rows;
+    }
+
+    public Xuke() {
     }
 
     public String getTotal() {
