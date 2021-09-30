@@ -1,6 +1,7 @@
 package com.action.demoaction.service;
 
-import com.action.demoaction.comm.httpres.ResLogin;
+import com.action.demoaction.comm.httpres.Course;
+import com.action.demoaction.comm.httpres.CourseBody;
 import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
 import com.ejlchina.okhttps.HTTP;
@@ -13,7 +14,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @Service
 public class StudyServiceImpl implements StudyService {
@@ -31,6 +36,8 @@ public class StudyServiceImpl implements StudyService {
 
     private final String urlCourse = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do";
 
+    private final String urlWatch = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do?yCourseKnowledgeStudy&id=";
+
     private HTTP http = HTTP.builder().build();
 
     private Map<String,String> cookies = new HashMap<>();
@@ -39,7 +46,7 @@ public class StudyServiceImpl implements StudyService {
     public void login(String username, String password) throws Exception {
 
         // 如果已经有cookie直接返回
-        if (this.cookies.containsKey(username)) return;
+//        if (this.cookies.containsKey(username)) return;
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
         map.add("userName",username);
@@ -57,7 +64,6 @@ public class StudyServiceImpl implements StudyService {
         boolean b = success.asBoolean();
 
         HttpHeaders headers1 = exchange.getHeaders();
-        // todo 将cookie 保存起来（用map，key存userNmame，下次来访问直接查询，有就直接拿cookie不走登录了），给其他访问带上使用
         String cookie = headers1.get("Set-Cookie").get(0);
         this.cookies.put(username,cookie);
         String body = exchange.getBody();
@@ -75,23 +81,50 @@ public class StudyServiceImpl implements StudyService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.COOKIE,cookie);
-
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(this.urlXuke, request, String.class);
+//        ResponseEntity<String> response = restTemplate.postForEntity(this.urlXuke, request, String.class);
         Xuke xuke = restTemplate.postForObject(this.urlXuke, request, Xuke.class);
-        System.out.println(response.getBody());
-
         return xuke.getRows();
     }
 
     @Override
-    public List<String> getCourseIds(String CourseName, String CourseNo,String userName) {
-        return null;
+    public List<CourseBody> getCourseIds(String courseName, String courseNo, String userName) {
+        String cookie = this.cookies.get(userName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.COOKIE,cookie);
+        String tmp = "?datagrid&courseName=" + courseName + "&sysType=1&courseNo=" + courseNo
+                + "&field=id,courseName,coursePointNo,";
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
+        Course course = restTemplate.postForObject(this.urlCourse+tmp, request, Course.class);
+
+        return course.getRows();
+
     }
 
     @Override
-    public void studyAll(String ids) {
+    public void studyAll(ArrayList<CourseBody> ids,String userName) {
 
+        String cookie = this.cookies.get(userName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.COOKIE,cookie);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
+
+        for (CourseBody courseBody : ids) {
+            String url = this.urlWatch + courseBody.getId();
+            ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
+            System.out.println("链接--"+url+"\n" + ent);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        System.out.println("over");
 
     }
 

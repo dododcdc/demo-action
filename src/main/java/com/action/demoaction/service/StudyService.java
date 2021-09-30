@@ -1,7 +1,9 @@
 package com.action.demoaction.service;
 
+import com.action.demoaction.comm.httpres.CourseBody;
 import com.action.demoaction.comm.httpres.XukeBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface StudyService {
@@ -22,19 +24,16 @@ public interface StudyService {
 
     /**
      * 根据学科获取该学科下所有的课程Id
-     * @param CourseName
-     * @param CourseNo
+     * @param courseName
+     * @param courseNo
      * @return
      */
-    List<String> getCourseIds(String CourseName,String CourseNo,String userName);
+    List<CourseBody> getCourseIds(String courseName, String courseNo, String userName);
 
     /**
      * 学习
      * @param ids
      */
-    void studyAll(String ids);
-
-
-
+    void studyAll(ArrayList<CourseBody> ids, String userName)  ;
 
 }
