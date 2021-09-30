@@ -43,7 +43,7 @@ public class StudyServiceImpl implements StudyService {
     private Map<String,String> cookies = new HashMap<>();
 
     @Override
-    public void login(String username, String password) throws Exception {
+    public boolean login(String username, String password) throws Exception {
 
         // 如果已经有cookie直接返回
 //        if (this.cookies.containsKey(username)) return;
@@ -61,16 +61,16 @@ public class StudyServiceImpl implements StudyService {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(exchange.getBody());
         JsonNode success = jsonNode.path("success");
-        boolean b = success.asBoolean();
+        boolean isLogin = success.asBoolean();
+        //登录失败返回false
+        if (!isLogin) return isLogin;
 
+        // 登录成功将cookie保存起来
         HttpHeaders headers1 = exchange.getHeaders();
         String cookie = headers1.get("Set-Cookie").get(0);
         this.cookies.put(username,cookie);
-        String body = exchange.getBody();
-//        if (!resLogin.isSuccess()) {
-//            throw new Exception(resLogin.getMsg());
-//        }
-        System.out.println("over");
+
+        return true;
 
     }
 
@@ -120,12 +120,7 @@ public class StudyServiceImpl implements StudyService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
-
-
-        System.out.println("over");
-
     }
 
 

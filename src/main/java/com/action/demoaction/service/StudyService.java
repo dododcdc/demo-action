@@ -13,8 +13,9 @@ public interface StudyService {
      * 登录
      * @param username
      * @param password
+     * @return
      */
-    void login(String username,String password) throws Exception;
+    boolean login(String username, String password) throws Exception;
 
     /**
      * 获取所有学科

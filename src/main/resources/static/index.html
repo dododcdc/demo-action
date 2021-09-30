@@ -2,42 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>一键上课</title>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-
 
 </head>
 <body>
 
-<h1>欢迎来到西电一键上完所有课</h1>
-<h2>只需点一下就上完所有课，太神奇了</h2>
-<h2>刚开始上课就毕业了，太神奇了</h2>
-<h1>赶快拿起手中的键盘开始上课吧</h1>
 
-<!--<form method="post" action="study" >-->
-<!--    <input type="text" name="username" value="" />-->
-<!--    <input type="password" name="pwd" value="" />-->
-<!--    <input type="submit" value="提交"/>-->
-<!--</form>-->
 
 <div id="xd">
-    <el-row>
-
-    <el-form :model="xdForm"   ref="xdForm" label-width="100px" class="xdForm">
-        <el-form-item label="学号" >
-            <el-input type="text" v-model="xdForm.userName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码密码">
-            <el-input type="password" v-model="xdForm.password" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm('xdForm')">提交</el-button>
-        </el-form-item>
-    </el-form>
-
+    <div style="margin-top:200px"></div>
+    <el-row type="flex" class="row-bg" justify="center">
+        <el-col :span="12" style="color: dodgerblue;text-align:center">
+            <h1>一键上课</h1>
+        </el-col>
     </el-row>
+    <el-row type="flex" class="row-bg" justify="center" >
+        <el-col :span="6">
+            <el-form :model="xdForm" ref="xdForm" label-width="100px" class="xdForm">
+                <el-form-item label="学号">
+                    <el-input type="text" v-model="xdForm.userName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input type="password" v-model="xdForm.password" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-row type="flex" justify="center">
+                        <el-col :span="10">
+                            <el-button type="primary" @click="submitForm('xdForm')">开始上课</el-button>
+                        </el-col>
+                    </el-row>
+
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
+
+
 </div>
 
 
@@ -53,30 +55,42 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
+    Vue.prototype.openLoading = function () {
+        const loading = this.$loading({           // 声明一个loading对象
+            lock: true,                             // 是否锁屏
+            text: '正在帮你上课...',                     // 加载动画的文字
+            spinner: 'el-icon-loading',             // 引入的loading图标
+            background: 'rgba(0, 0, 0, 0.3)',       // 背景颜色
+            target: '.sub-main',                    // 需要遮罩的区域
+            body: true,
+            customClass: 'mask'                     // 遮罩层新增类名
+        })
+        // setTimeout(function () {                  // 设定定时器，超时5S后自动关闭遮罩层，避免请求失败时，遮罩层一直存在的问题
+        //     loading.close();                        // 关闭遮罩层
+        // },5000)
+        return loading;
+    }
 
 
     var vm = new Vue({
         el: '#xd',
         data: {
             xdForm: {
-                userName:'222',
-                password:''
+                userName: '请输入你的学号',
+                password: '请输入你的密码'
             }
         },
 
         methods: {
 
-            submitForm: function(formName) {
-                console.log(this.xdForm.userName+":"+this.xdForm.password);
-                // axios.get("http://localhost:8081/urls").then(x => {
-                //     console.log(x.data)
-                // })
-
-                axios.post("http://localhost:8081/study",this.xdForm).then(x => {
+            submitForm: function (formName) {
+                console.log(this.xdForm.userName + ":" + this.xdForm.password);
+                const rLoading = this.openLoading();
+                axios.post("http://localhost:8081/study", this.xdForm).then(x => {
                     console.log(x.data.msg)
+                    rLoading.close();
                 })
             },
-
 
         }
     })

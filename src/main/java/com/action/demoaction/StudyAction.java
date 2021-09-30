@@ -29,7 +29,8 @@ public class StudyAction {
         try {
             String username = user.getUserName();
             String password = user.getPassword();
-            studyService.login(username,password);
+            boolean isLogin = studyService.login(username, password);
+            if(!isLogin) return CommResult.fail("用户名或密码错误");
             List<XukeBody> xukes = studyService.getXukes(username);
             // 所有课程id
             ArrayList<CourseBody> ids = new ArrayList<>();
@@ -42,12 +43,11 @@ public class StudyAction {
             }
 
             // 开始学习所有课程
-            studyService.studyAll(ids,username);
-
+//            studyService.studyAll(ids,username);
             System.out.println("gg");
-
         } catch (Exception e) {
             e.printStackTrace();
+            return CommResult.fail("服务器异常");
         }
         return CommResult.success();
     }
