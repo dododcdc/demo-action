@@ -19,6 +19,29 @@ public class XukeBody {
             private String assistTeacherName;
             private String answerTeacherName;
 
+
+    public XukeBody() {
+    }
+
+    public XukeBody(String state, String id, String createName, String createBy, String createDate, String updateName, String updateBy, String updateDate, String useTime, String courseNo, String courseName, String courseForm, String examForm, String mainTeacherName, String assistTeacherName, String answerTeacherName) {
+        this.state = state;
+        this.id = id;
+        this.createName = createName;
+        this.createBy = createBy;
+        this.createDate = createDate;
+        this.updateName = updateName;
+        this.updateBy = updateBy;
+        this.updateDate = updateDate;
+        this.useTime = useTime;
+        this.courseNo = courseNo;
+        this.courseName = courseName;
+        this.courseForm = courseForm;
+        this.examForm = examForm;
+        this.mainTeacherName = mainTeacherName;
+        this.assistTeacherName = assistTeacherName;
+        this.answerTeacherName = answerTeacherName;
+    }
+
     public String getState() {
         return state;
     }

@@ -18,7 +18,7 @@ public interface StudyService {
      * 获取所有学科
      * @return
      */
-    List<XukeBody> getXukes() ;
+    List<XukeBody> getXukes(String userName) ;
 
     /**
      * 根据学科获取该学科下所有的课程Id
@@ -26,7 +26,7 @@ public interface StudyService {
      * @param CourseNo
      * @return
      */
-    List<String> getCourseIds(String CourseName,String CourseNo);
+    List<String> getCourseIds(String CourseName,String CourseNo,String userName);
 
     /**
      * 学习
