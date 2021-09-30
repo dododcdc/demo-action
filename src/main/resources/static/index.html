@@ -82,11 +82,12 @@
         },
 
         methods: {
-
             submitForm: function (formName) {
                 console.log(this.xdForm.userName + ":" + this.xdForm.password);
                 const rLoading = this.openLoading();
-                axios.post("http://localhost:8081/study", this.xdForm).then(x => {
+                const url = "http://localhost:8081/study?" + "userName="
+                + this.xdForm.userName + "&password=" + this.xdForm.password;
+                axios.get(url).then(x => {
                     console.log(x.data.msg)
                     rLoading.close();
                 })

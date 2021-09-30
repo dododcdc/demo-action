@@ -9,10 +9,7 @@ import com.action.demoaction.comm.httpres.XukeBody;
 import com.action.demoaction.service.StudyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,23 +23,23 @@ public class StudyAction {
     StudyService studyService;
 
 
-    @PostMapping("/study")
-    public CommResult study(@RequestBody User user)  {
+    @GetMapping("/study")
+    public CommResult study(String userName,String password)  {
         log.info("study接口被访问");
         try {
-            String username = user.getUserName();
-            String password = user.getPassword();
-            boolean isLogin = studyService.login(username, password);
+//            String username = user.getUserName();
+//            String password = user.getPassword();
+            boolean isLogin = studyService.login(userName, password);
             if(!isLogin) return CommResult.fail("用户名或密码错误");
-            List<XukeBody> xukes = studyService.getXukes(username);
+            List<XukeBody> xukes = studyService.getXukes(userName);
             // 所有课程id
             ArrayList<CourseBody> ids = new ArrayList<>();
 
             for (XukeBody xuke : xukes) {
                 //某个学科下的所有课程
-                List<CourseBody> courseIds = studyService.getCourseIds(xuke.getCourseName(), xuke.getCourseNo(), username);
+                List<CourseBody> courseIds = studyService.getCourseIds(xuke.getCourseName(), xuke.getCourseNo(), userName);
                 ids.addAll(courseIds);
-                if (true) break;
+                break;
             }
 
             // 开始学习所有课程
