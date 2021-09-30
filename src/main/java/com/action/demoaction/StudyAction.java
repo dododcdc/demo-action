@@ -7,6 +7,7 @@ import com.action.demoaction.comm.httpres.CourseBody;
 import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
 import com.action.demoaction.service.StudyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping
 public class StudyAction {
@@ -26,6 +28,7 @@ public class StudyAction {
 
     @PostMapping("/study")
     public CommResult study(@RequestBody User user)  {
+        log.info("study接口被访问");
         try {
             String username = user.getUserName();
             String password = user.getPassword();
