@@ -1,10 +1,12 @@
 package com.action.demoaction;
 
 
+import com.action.demoaction.comm.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
@@ -25,7 +27,8 @@ public class DemoAction {
 
     @ResponseBody
     @PostMapping("/test")
-    public String test() {
+    public String test(@RequestBody User user) {
+        log.info(user.toString());
         log.info("test接口被访问");
         return "https://goodbin.cn/videos/v4.mp4";
     }
