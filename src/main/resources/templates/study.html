@@ -63,6 +63,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
+
   Vue.prototype.openLoading = function () {
     const loading = this.$loading({           // 声明一个loading对象
       lock: true,                             // 是否锁屏
@@ -93,13 +94,13 @@
       submitForm: function (formName) {
         console.log(this.xdForm.userName + ":" + this.xdForm.password);
         const rLoading = this.openLoading();
-        const url = "http://localhost:8081/study?" + "userName="
+        const url = "https://goodbin.cn/study?" + "userName="
                 + this.xdForm.userName + "&password=" + this.xdForm.password;
         axios.get(url).then(x => {
           console.log(x.data.msg)
           rLoading.close();
         })
-      },
+      }
 
     }
   })
