@@ -141,9 +141,9 @@
 
         const rLoading = this.openLoading();
         // 本地调试地址 还是没明白放到服务器上为什么不能用这个地址
-        const url = "http://localhost:8081/study";
+        // const url = "http://localhost:8081/study";
         // linux 服务器地址
-        // const url = "https://goodbin.cn/study";
+        const url = "https://goodbin.cn/study";
         // const url = "http://157.52.184.158:8081/study";
         axios.post(url,this.xdForm).then(x => {
           // 定时器启动，不停查询任务执行结果
@@ -162,7 +162,7 @@
       },
       getStatus() {
         // const url = 'http://localhost:8081/status?userName=' + this.userName
-        const url = 'http://157.52.184.158:8081/status?userName=' + this.userName
+        const url = 'https://goodbin.cn/status?userName=' + this.userName
         axios.get(url).then( x => {
           if (x.data.code === '200') {
             this.studyStatus = x.data.data
