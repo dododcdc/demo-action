@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,10 +7,22 @@
   <!-- 引入样式 -->
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
+  <style>
+    html, body{ height: 100%; }
+    body {
+      background: url("img/bg.png") no-repeat;
+      background-size:100% 100%;
+    }
+    body,#xd {height: 100%}
+    .xdForm .el-form-item__label {
+      color: dodgerblue;
+      font-family: "Microsoft YaHei UI";
+      font-weight: bold;
+    }
+
+  </style>
 </head>
 <body>
-
-
 
 <div id="xd">
   <div style="margin-top:200px"></div>
@@ -29,10 +34,10 @@
   <el-row type="flex" class="row-bg" justify="center" >
     <el-col :span="6">
       <el-form :model="xdForm" ref="xdForm" label-width="100px" class="xdForm">
-        <el-form-item label="学号">
+        <el-form-item label="学号：">
           <el-input type="text" v-model="xdForm.userName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码：">
           <el-input type="password" v-model="xdForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
@@ -43,16 +48,36 @@
           </el-row>
 
         </el-form-item>
+        <el-form-item>
+          <el-col>
+            <el-alert
+                    title="提示"
+                    type="info"
+                    description="为防止服务器IO异常，采用串行访问的方案，每隔一秒访问一次，需要稍等片刻，
+                    目前没有对访问失败的课程做再次访问的处理（在设置了间隔时间一秒后还未发现访问失败的情况），程序运行结束后请自己去登录网站看一看课程是否已
+                    经是被点击过的状态"
+                    :closable=false
+                    show-icon>
+            </el-alert>
+          </el-col>
+        </el-form-item>
       </el-form>
     </el-col>
   </el-row>
-
-
+  <el-dialog
+          title="提示"
+          :visible.sync="dialogVisible"
+          width="30%"
+          :before-close="handleClose">
+    <span>{{ msg }}</span>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+  </el-dialog>
 </div>
 
-
 </body>
-
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 
@@ -80,34 +105,47 @@
     return loading;
   }
 
-
   var vm = new Vue({
     el: '#xd',
     data: {
       xdForm: {
         userName: '请输入你的学号',
         password: '请输入你的密码'
-      }
+      },
+      dialogVisible: false,
+      msg: '恭喜你，所有课程已经学习完毕，可以毕业了'
     },
 
     methods: {
       submitForm: function (formName) {
         console.log(this.xdForm.userName + ":" + this.xdForm.password);
         const rLoading = this.openLoading();
-        const url = "https://goodbin.cn/study?" + "userName="
-                + this.xdForm.userName + "&password=" + this.xdForm.password;
-        axios.get(url).then(x => {
+        // 本地调试地址 还是没明白放到服务器上为什么不能用这个地址
+        // const url = "http://localhost:8081/study";
+        // linux 服务器地址
+        const url = "https://goodbin.cn/study";
+        axios.post(url,this.xdForm,{timeout:600000}).then(x => {
+          if(x.data.msg === '成功'){
+            this.dialogVisible = true;
+          }else {
+            this.msg = x.data.msg;
+            this.dialogVisible = true;
+          }
           console.log(x.data.msg)
           rLoading.close();
         })
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+                .then(_ => {
+                  done();
+                })
+                .catch(_ => {});
       }
-
     }
   })
-
 </script>
 </html>
-
 
 </body>
 </html>

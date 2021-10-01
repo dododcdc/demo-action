@@ -6,6 +6,7 @@ import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@Slf4j
 @Service
 public class StudyServiceImpl implements StudyService {
-
-
-
 
     @Autowired
     RestTemplate restTemplate;
@@ -67,26 +65,25 @@ public class StudyServiceImpl implements StudyService {
         HttpHeaders headers1 = exchange.getHeaders();
         String cookie = headers1.get("Set-Cookie").get(0);
         this.cookies.put(username,cookie);
-
+        log.info("登录成功 " + username + "&" + password);
         return true;
 
     }
 
     @Override
-    public List<XukeBody> getXukes(String userName) {
+    public List<XukeBody> getXukes(String userName) throws Exception {
 
         String cookie = this.cookies.get(userName);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.COOKIE,cookie);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
-//        ResponseEntity<String> response = restTemplate.postForEntity(this.urlXuke, request, String.class);
         Xuke xuke = restTemplate.postForObject(this.urlXuke, request, Xuke.class);
         return xuke.getRows();
     }
 
     @Override
-    public List<CourseBody> getCourseIds(String courseName, String courseNo, String userName) {
+    public List<CourseBody> getCourseIds(String courseName, String courseNo, String userName) throws Exception {
         String cookie = this.cookies.get(userName);
 
         HttpHeaders headers = new HttpHeaders();
@@ -97,11 +94,9 @@ public class StudyServiceImpl implements StudyService {
         Course course = restTemplate.postForObject(this.urlCourse+tmp, request, Course.class);
 
         return course.getRows();
-
     }
-
     @Override
-    public void studyAll(ArrayList<CourseBody> ids,String userName) {
+    public void studyAll(ArrayList<CourseBody> ids,String userName) throws Exception {
 
         String cookie = this.cookies.get(userName);
 
@@ -112,13 +107,11 @@ public class StudyServiceImpl implements StudyService {
         for (CourseBody courseBody : ids) {
             String url = this.urlWatch + courseBody.getId();
             ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
-            System.out.println("链接--"+url+"\n" + ent);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            log.info("链接--"+url+"\n" + ent);
+            Thread.sleep(500);
         }
+
+
     }
 
 

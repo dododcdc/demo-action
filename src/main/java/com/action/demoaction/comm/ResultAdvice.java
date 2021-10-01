@@ -24,7 +24,7 @@ public class ResultAdvice implements ResponseBodyAdvice<Object>  {
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
 
-        System.out.println("hello");
+        System.out.println("ResultAdvice hello");
         return null;
     }
 }

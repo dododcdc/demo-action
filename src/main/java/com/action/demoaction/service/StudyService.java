@@ -21,7 +21,7 @@ public interface StudyService {
      * 获取所有学科
      * @return
      */
-    List<XukeBody> getXukes(String userName) ;
+    List<XukeBody> getXukes(String userName) throws Exception;
 
     /**
      * 根据学科获取该学科下所有的课程Id
@@ -29,12 +29,12 @@ public interface StudyService {
      * @param courseNo
      * @return
      */
-    List<CourseBody> getCourseIds(String courseName, String courseNo, String userName);
+    List<CourseBody> getCourseIds(String courseName, String courseNo, String userName) throws Exception;
 
     /**
      * 学习
      * @param ids
      */
-    void studyAll(ArrayList<CourseBody> ids, String userName)  ;
+    void studyAll(ArrayList<CourseBody> ids, String userName)  throws Exception;
 
 }
