@@ -1,9 +1,11 @@
 package com.action.demoaction.service;
 
+import com.action.demoaction.comm.StudyStatus;
 import com.action.demoaction.comm.httpres.Course;
 import com.action.demoaction.comm.httpres.CourseBody;
 import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
+import com.action.demoaction.config.AppConstent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,8 @@ public class StudyServiceImpl implements StudyService {
     private final String urlWatch = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do?yCourseKnowledgeStudy&id=";
 
 
-    private Map<String,String> cookies = new HashMap<>();
+    private Map<String, String> cookies = new HashMap<>();
+
 
     @Override
     public boolean login(String username, String password) throws Exception {
@@ -44,9 +47,9 @@ public class StudyServiceImpl implements StudyService {
         // 如果已经有cookie直接返回
 //        if (this.cookies.containsKey(username)) return;
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("userName",username);
-        map.add("password",password);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("userName", username);
+        map.add("password", password);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
@@ -64,7 +67,7 @@ public class StudyServiceImpl implements StudyService {
         // 登录成功将cookie保存起来
         HttpHeaders headers1 = exchange.getHeaders();
         String cookie = headers1.get("Set-Cookie").get(0);
-        this.cookies.put(username,cookie);
+        this.cookies.put(username, cookie);
         log.info("登录成功 " + username + "&" + password);
         return true;
 
@@ -76,7 +79,7 @@ public class StudyServiceImpl implements StudyService {
         String cookie = this.cookies.get(userName);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.COOKIE,cookie);
+        headers.set(HttpHeaders.COOKIE, cookie);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
         Xuke xuke = restTemplate.postForObject(this.urlXuke, request, Xuke.class);
         return xuke.getRows();
@@ -87,30 +90,35 @@ public class StudyServiceImpl implements StudyService {
         String cookie = this.cookies.get(userName);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.COOKIE,cookie);
+        headers.set(HttpHeaders.COOKIE, cookie);
         String tmp = "?datagrid&courseName=" + courseName + "&sysType=1&courseNo=" + courseNo
                 + "&field=id,courseName,coursePointNo,";
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
-        Course course = restTemplate.postForObject(this.urlCourse+tmp, request, Course.class);
+        Course course = restTemplate.postForObject(this.urlCourse + tmp, request, Course.class);
 
         return course.getRows();
     }
+
     @Override
-    public void studyAll(ArrayList<CourseBody> ids,String userName) throws Exception {
+    public void studyAll(ArrayList<CourseBody> ids, String userName) throws Exception {
 
         String cookie = this.cookies.get(userName);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.COOKIE,cookie);
+        headers.set(HttpHeaders.COOKIE, cookie);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
 
         for (CourseBody courseBody : ids) {
             String url = this.urlWatch + courseBody.getId();
             ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
-            log.info("链接--"+url+"\n" + ent);
+            log.info("链接--" + url + "\n" + ent);
             Thread.sleep(500);
         }
 
+        // 将学习状态更新
+        AppConstent.STATUS.put(userName, StudyStatus.STARTED);
+
+        log.info("所有课程学习完毕");
 
     }
 

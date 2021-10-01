@@ -47,14 +47,18 @@
             </el-col>
           </el-row>
 
+          <el-row >
+            <el-col :span="5">上课状态：</el-col>
+            <el-col :span="5">{{ studyStatus }}</el-col>
+          </el-row>
+
         </el-form-item>
         <el-form-item>
           <el-col>
             <el-alert
                     title="提示"
                     type="info"
-                    description="为防止服务器IO异常，采用串行访问的方案，每隔一秒访问一次，需要稍等片刻，
-                    目前没有对访问失败的课程做再次访问的处理（在设置了间隔时间一秒后还未发现访问失败的情况），程序运行结束后请自己去登录网站看一看课程是否已
+                    description="程序运行结束后请自己去登录网站看一看课程是否已
                     经是被点击过的状态"
                     :closable=false
                     show-icon>
@@ -105,34 +109,47 @@
     return loading;
   }
 
+
+
   var vm = new Vue({
     el: '#xd',
     data: {
+      timer:undefined,
+      userName:'-9999',
       xdForm: {
         userName: '请输入你的学号',
         password: '请输入你的密码'
       },
       dialogVisible: false,
-      msg: '恭喜你，所有课程已经学习完毕，可以毕业了'
+      msg: '自动上课任务已经提交，请耐心等待',
+      studyStatus: '还未开始'
     },
 
+    // mounted: function () {
+    //   var that = this
+    //   // todo 设置定时器，查看
+    //   this.timer = setInterval(function () {
+    //     that.getStatus()
+    //   }, 1000);
+    //
+    // },
     methods: {
       submitForm: function (formName) {
         console.log(this.xdForm.userName + ":" + this.xdForm.password);
+        // 将userName给当前页面 ， 定时器根据这个 不停查询异步任务执行的情况
+        this.userName = this.xdForm.userName;
+
         const rLoading = this.openLoading();
         // 本地调试地址 还是没明白放到服务器上为什么不能用这个地址
-        // const url = "http://localhost:8081/study";
+        const url = "http://localhost:8081/study";
         // linux 服务器地址
         // const url = "https://goodbin.cn/study";
-        const url = "http://157.52.184.158:8081/study";
-        axios.post(url,this.xdForm,{timeout:600000}).then(x => {
-          if(x.data.msg === '成功'){
-            this.dialogVisible = true;
-          }else {
-            this.msg = x.data.msg;
-            this.dialogVisible = true;
-          }
-          console.log(x.data.msg)
+        // const url = "http://157.52.184.158:8081/study";
+        axios.post(url,this.xdForm).then(x => {
+          // 定时器启动，不停查询任务执行结果
+          this.st()
+          this.msg = x.data.data
+          this.dialogVisible = true;
           rLoading.close();
         })
       },
@@ -142,8 +159,37 @@
                   done();
                 })
                 .catch(_ => {});
+      },
+      getStatus() {
+        // const url = 'http://localhost:8081/status?userName=' + this.userName
+        const url = 'http://157.52.184.158:8081/status?userName=' + this.userName
+        axios.get(url).then( x => {
+          if (x.data.code === '200') {
+            this.studyStatus = x.data.data
+            // 当任务执行结果为[完成] 时 ，关闭定时器
+            if (this.studyStatus === '完成') {
+             this.stop()
+            }
+          }
+        })
+      },
+
+      st() {
+        console.log("设置定时器")
+        this.timer = setInterval(this.getStatus,4000)
+      },
+      stop () {
+        console.log("暂停定时器")
+        clearInterval(this.timer)
       }
-    }
+
+    },
+
+    // mounted() {
+    //   this.timer = setInterval(function () {
+    //     this.studyStatus = this.studyStatus + '1'
+    //   }, 4000);
+    // }
   })
 </script>
 </html>

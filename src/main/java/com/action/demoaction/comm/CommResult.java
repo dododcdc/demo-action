@@ -20,8 +20,8 @@ public class CommResult {
     public static CommResult fail() {
         return new CommResult("500","失败",null);
     }
-    public static CommResult fail(String msg) {
-        return new CommResult("500",msg,null);
+    public static CommResult fail(Object o) {
+        return new CommResult("500","失败",o);
     }
 
     public CommResult(String code, String msg, Object data) {
