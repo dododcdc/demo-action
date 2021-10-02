@@ -36,10 +36,9 @@ public class StudyAction {
     public CommResult study(@RequestBody User user)  {
         log.info("study接口被访问" );
 
-        // todo
-        // 先判断 AppConstent.STATUS 的size  不能超过一条 ,其次  状态只能是已经结束
+        // 先判断 AppConstent.STATUS 的size  不能超过一条 ,其次  状态只能是已经结束 , 这样才能启动任务
         if (AppConstent.STATUS.size() > 1) {
-            return CommResult.fail("请稍后再试");
+            return CommResult.fail("异常：发生了难以置信的情况");
         }
         else if (AppConstent.STATUS.size() == 1 ) {
             Set<String> strings = AppConstent.STATUS.keySet();
@@ -48,7 +47,7 @@ public class StudyAction {
                 s = AppConstent.STATUS.get(string);
                 break;
             }
-            // 等于1有两个情况 ，一个是  已经完成，一个是还没完成
+            // 等于1有两个情况 ，一个是 已经完成，一个是还没完成
             if (s !=  StudyStatus.STARTED) {  // 没完成
                 return CommResult.fail("当前有其他人占用了资源，请稍后再试");
             }else { // 已经完成
@@ -74,7 +73,7 @@ public class StudyAction {
                 List<CourseBody> courseIds = studyService.getCourseIds(xuke.getCourseName(), xuke.getCourseNo(), userName);
                 ids.addAll(courseIds);
                 // todo 暂时只跑一个学科的课程测试 后续放开break
-                break;
+//                break;
             }
 
             // 开始学习所有课程,异步执行，学习结束后会更新学习状态
