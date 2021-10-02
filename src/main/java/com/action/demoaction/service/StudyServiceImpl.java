@@ -109,7 +109,6 @@ public class StudyServiceImpl implements StudyService {
         for (CourseBody courseBody : ids) {
             log.info("总共有" + ids.size() + " 个课程");
             log.info( ++num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "开始");
-
             String url = this.urlWatch + courseBody.getId();
             ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
             log.info(++num + courseBody.getCourseName()+courseBody.getCoursePointNo() + "链接--" + url + "\n" + ent);
