@@ -76,6 +76,8 @@ public class StudyAction {
 //                break;
             }
 
+
+
             // 开始学习所有课程,异步执行，学习结束后会更新学习状态
 
             new Thread(() -> {

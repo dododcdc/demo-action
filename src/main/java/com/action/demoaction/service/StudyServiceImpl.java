@@ -101,18 +101,21 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public void studyAll(ArrayList<CourseBody> ids, String userName) throws Exception {
-
+        log.info("总共有" + ids.size() + " 个课程");
         String cookie = this.cookies.get(userName);
-
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.COOKIE, cookie);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
-
+        int num = 0;
         for (CourseBody courseBody : ids) {
+            log.info( ++num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "开始");
+
             String url = this.urlWatch + courseBody.getId();
             ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
-            log.info("链接--" + url + "\n" + ent);
+            log.info(++num + courseBody.getCourseName()+courseBody.getCoursePointNo() + "链接--" + url + "\n" + ent);
+            log.info(++num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "结束");
             Thread.sleep(500);
+
         }
 
         // 将学习状态更新
