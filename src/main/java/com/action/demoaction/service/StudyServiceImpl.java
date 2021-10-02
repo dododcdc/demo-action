@@ -111,10 +111,9 @@ public class StudyServiceImpl implements StudyService {
             log.info( ++num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "开始");
             String url = this.urlWatch + courseBody.getId();
             ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
-            log.info(++num + courseBody.getCourseName()+courseBody.getCoursePointNo() + "链接--" + url + "\n" + ent);
-            log.info(++num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "结束");
+            log.info(num + courseBody.getCourseName()+courseBody.getCoursePointNo() + "链接--" + url + "\n" + ent);
+            log.info(num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "结束");
             Thread.sleep(500);
-
         }
 
         // 将学习状态更新
