@@ -81,18 +81,18 @@
             </el-col>
           </el-row>
 
-          <el-row >
-            <el-col :span="5">
-              <div>
-                <b>上课状态： </b>
-              </div>
-            </el-col>
-            <el-col :span="5">
-              <div>
-                <b> {{ studyStatus }} </b>
-              </div>
-            </el-col>
-          </el-row>
+<!--          <el-row >-->
+<!--            <el-col :span="5">-->
+<!--              <div>-->
+<!--                <b>上课状态： </b>-->
+<!--              </div>-->
+<!--            </el-col>-->
+<!--            <el-col :span="5">-->
+<!--              <div>-->
+<!--                <b> {{ studyStatus }} </b>-->
+<!--              </div>-->
+<!--            </el-col>-->
+<!--          </el-row>-->
 
         </el-form-item>
         <el-form-item>
@@ -149,8 +149,8 @@
 
 <script>
 
-  // const baseUrl = 'http://localhost:8081'
-  const baseUrl = 'https://goodbin.cn'
+  const baseUrl = 'http://localhost:8081'
+  // const baseUrl = 'https://goodbin.cn'
 
   const api = axios.create({ baseURL: baseUrl })
   Vue.prototype.$api = api
@@ -187,6 +187,10 @@
       msg: '自动上课任务已经提交，请耐心等待',
       studyStatus: '还未开始',
       caidan: false
+    },
+
+    mounted: function () {
+      this.studyStatus = '还未开始'
     },
 
     methods: {

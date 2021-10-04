@@ -49,7 +49,7 @@ public class StudyAction {
             }
             // 等于1有两个情况 ，一个是 已经完成，一个是还没完成
             if (s !=  StudyStatus.STARTED) {  // 没完成
-                return CommResult.fail("当前有其他人占用了资源，请稍后再试");
+                return CommResult.fail("当前有任务正在运行，请稍后再试");
             }else { // 已经完成
                 AppConstent.STATUS.clear();
             }
@@ -94,7 +94,7 @@ public class StudyAction {
             return CommResult.fail("服务器异常");
         }
 
-        return CommResult.success("自动上课任务已经提交，请耐心等待，当上课状态显示[完成]时表示已经上完所有课程");
+        return CommResult.success("自动上课任务已经提交,请耐心等待,该程序不返回执行状态,稍后自己去西电学习平台查看是否已经成功");
     }
 
     /**
