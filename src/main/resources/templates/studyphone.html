@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>一键上课</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+  <!-- 引入样式 -->
+<!--  <link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">-->
+  <link rel="stylesheet" href="/css/mint-ui/style.css">
+  <style>
+
+    html , body {
+      margin: 0;
+    }
+
+    .study-containe {
+      margin: 0;padding: 0;
+      width: 100%;
+      height: 100%;
+      background: url("img/bg.png") no-repeat;
+      background-size:100% 100%;
+      position: absolute;
+    }
+
+    header.mint-header.is-fixed {
+      height: 200px;
+      margin-bottom: 100px;
+    }
+    h1.mint-header-title {
+      font-size: 300%;
+      font-weight: 500;
+    }
+
+    a.mint-cell.mint-field {
+      height: 150px;
+      font-size: 200%;
+    }
+
+    span.mint-cell-text {
+      font-size: xx-large;
+      color: #2196f3;
+    }
+    input.mint-field-core {
+      font-size: xx-large;
+    }
+
+    .xdForm{
+
+      margin:500px 100px 100px 100px;
+
+    }
+
+    button.mint-button.mint-button--primary.mint-button--large {
+      font-size: 50px;
+      height: 100px;
+    }
+
+    .el-dialog__body {
+      font-size: 25px;
+    }
+
+    button.el-button.el-button--primary {
+      width: 150px;
+      height: 70px;
+    }
+
+
+  </style>
+</head>
+<body>
+
+<div id="xd" class="study-containe">
+  <mt-header fixed title="一键上课"></mt-header>
+
+  <div  class="xdForm" :v-model="xdForm">
+    <mt-field label="学号" placeholder="请输入学号" v-model="xdForm.userName"></mt-field>
+
+    <mt-field label="密码" placeholder="请输入密码" type="password" v-model="xdForm.password"></mt-field>
+
+    <mt-button type="primary" size="large" @click="submitForm('xdFrom')">开始上课</mt-button>
+
+  </div>
+
+  <div style="font-size: 50px;color: #2196f3">
+    上课状态： {{ studyStatus }}
+  </div>
+
+
+  <el-dialog
+          title="提示"
+          :visible.sync="dialogVisible"
+          width="50%"
+          >
+    <span>{{ msg }}</span>
+    <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="dialogVisible = false" style="font-size: 40px">确 定</el-button>
+    </span>
+  </el-dialog>
+
+</div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<!-- 引入组件库 -->
+<!--<script src="https://unpkg.com/mint-ui/lib/index.js"></script>-->
+<script src="/js/mint-ui/index.js"></script>
+<!--  引入axiox -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+
+  // const baseUrl = 'http://localhost:8081'
+  const baseUrl = 'https://goodbin.cn'
+
+  const api = axios.create({ baseURL: baseUrl })
+  Vue.prototype.$api = api
+
+
+  var vm = new Vue({
+    el: '#xd',
+    data: {
+      timer:undefined,
+      userName:'-9999',
+      xdForm: {
+        userName: '',
+        password: ''
+      },
+      dialogVisible: false,
+      msg: '自动上课任务已经提交，请耐心等待',
+      studyStatus: '还未开始',
+      caidan: false,
+      rangeValue: 20
+    },
+
+    methods: {
+      submitForm: function (formName) {
+        // console.log(this.xdForm.userName + ":" + this.xdForm.password);
+        // 将userName给当前页面 ， 定时器根据这个 不停查询异步任务执行的情况
+        this.userName = this.xdForm.userName;
+
+        // 本地调试地址 还是没明白放到服务器上为什么不能用这个地址
+        // const url = "http://localhost:8081/study";
+        const url = '/study'
+        // linux 服务器地址
+        // const url = "https://goodbin.cn/study";
+        // const url = "http://157.52.184.158:8081/study";
+        // axios.post(url,this.xdForm).then(x => {
+        this.$api.post(url,this.xdForm).then(x => {
+
+          // 定时器启动，不停查询任务执行结果
+          if (x.data.code==='200') {
+            this.st()
+          }
+          this.msg = x.data.data
+
+          this.dialogVisible = true;
+        })
+      },
+      getStatus() {
+        // const url = 'http://localhost:8081/status?userName=' + this.userName
+        // const url = 'https://goodbin.cn/status?userName=' + this.userName
+        // axios.get(url).then( x => {
+        const url = '/status?userName=' + this.userName
+        this.$api.get(url).then(x => {
+          if (x.data.code === '200') {
+            this.studyStatus = x.data.data
+            // 当任务执行结果为[完成] 时 ，关闭定时器
+            if (this.studyStatus === '完成') {
+              this.stop()
+            }
+          }
+        })
+      },
+
+      st() {
+        console.log("设置定时器")
+        this.timer = setInterval(this.getStatus,4000)
+      },
+      stop () {
+        console.log("暂停定时器")
+        clearInterval(this.timer)
+      }
+
+    }
+  })
+</script>
+</html>
+
+</body>
+</html>

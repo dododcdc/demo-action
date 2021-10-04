@@ -29,6 +29,11 @@ public class DemoAction {
         return "study";
     }
 
+    @GetMapping("/xdp")
+    public String xdp() {
+        return "studyphone";
+    }
+
 
 
 
