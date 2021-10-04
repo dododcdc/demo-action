@@ -69,10 +69,10 @@
     <el-col :span="6">
       <el-form :model="xdForm" ref="xdForm" label-width="100px" class="xdForm">
         <el-form-item label="学号：">
-          <el-input type="text" v-model="xdForm.userName" autocomplete="off"></el-input>
+          <el-input type="text" v-model="xdForm.userName" placeholder="请输入学号" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码：">
-          <el-input type="password" v-model="xdForm.password" autocomplete="off"></el-input>
+          <el-input type="password" v-model="xdForm.password" placeholder="请输入密码" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-row type="flex" justify="center">
