@@ -44,9 +44,6 @@ public class StudyServiceImpl implements StudyService {
     @Override
     public boolean login(String username, String password) throws Exception {
 
-        // 如果已经有cookie直接返回
-//        if (this.cookies.containsKey(username)) return;
-
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("userName", username);
         map.add("password", password);

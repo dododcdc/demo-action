@@ -209,7 +209,7 @@
         // axios.post(url,this.xdForm).then(x => {
         this.$api.post(url,this.xdForm).then(x => {
           // 定时器启动，不停查询任务执行结果
-          this.st()
+          // this.st()
           this.msg = x.data.data
           this.dialogVisible = true;
           rLoading.close();

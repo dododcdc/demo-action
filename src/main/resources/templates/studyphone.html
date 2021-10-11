@@ -172,9 +172,9 @@
         this.$api.post(url,this.xdForm).then(x => {
 
           // 定时器启动，不停查询任务执行结果
-          if (x.data.code==='200') {
-            this.st()
-          }
+          // if (x.data.code==='200') {
+          //   this.st()
+          // }
           this.msg = x.data.data
           rLoading.close();
           this.dialogVisible = true;
