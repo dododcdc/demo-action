@@ -72,10 +72,7 @@ public class StudyAction {
                 //某个学科下的所有课程
                 List<CourseBody> courseIds = studyService.getCourseIds(xuke.getCourseName(), xuke.getCourseNo(), userName);
                 ids.addAll(courseIds);
-                // todo 暂时只跑一个学科的课程测试 后续放开break
-//                break;
             }
-
 
 
             // 开始学习所有课程,异步执行，学习结束后会更新学习状态
@@ -119,7 +116,5 @@ public class StudyAction {
             default:
                 return CommResult.fail("异常");
         }
-
-
     }
 }
