@@ -26,7 +26,7 @@ public class StudyAction {
 
     @Autowired
     StudyService studyService;
-
+    //todo  该接口只负责将课程id（把cookie也带上，每个人登录的cookie不一样）找到添加到一个list中，设置一个线程，只要list不为空就去除课程id去访问
     /**
      * 开始学习
      * @param user
@@ -60,7 +60,9 @@ public class StudyAction {
             String password = user.getPassword();
             log.info(userName);
             log.info(password);
+
             boolean isLogin = studyService.login(userName, password);
+
             if(!isLogin) return CommResult.fail("用户名或密码错误");
             // 更新学习状态
             AppConstent.STATUS.put(userName, StudyStatus.STARTING);

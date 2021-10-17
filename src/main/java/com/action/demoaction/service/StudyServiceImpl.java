@@ -16,10 +16,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -40,6 +39,11 @@ public class StudyServiceImpl implements StudyService {
 
     private Map<String, String> cookies = new HashMap<>();
 
+    // 存储userName cookie  课程id的拼接值
+    private final ArrayBlockingQueue<String> ucids = new ArrayBlockingQueue<>(1000);
+
+
+    private final ConcurrentHashMap<String,ArrayBlockingQueue<CourseBody>> map = new ConcurrentHashMap<>();
 
     @Override
     public boolean login(String username, String password) throws Exception {
@@ -58,7 +62,6 @@ public class StudyServiceImpl implements StudyService {
         JsonNode jsonNode = mapper.readTree(exchange.getBody());
         JsonNode success = jsonNode.path("success");
         boolean isLogin = success.asBoolean();
-        //登录失败返回false
         if (!isLogin) return isLogin;
 
         // 登录成功将cookie保存起来
@@ -92,9 +95,15 @@ public class StudyServiceImpl implements StudyService {
                 + "&field=id,courseName,coursePointNo,";
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
         Course course = restTemplate.postForObject(this.urlCourse + tmp, request, Course.class);
-
-        return course.getRows();
+        //TODO 拼接userName + cookie + id 放入容器中
+        List<CourseBody> rows = course.getRows();
+        ArrayBlockingQueue<CourseBody> courseBodies = new ArrayBlockingQueue<CourseBody>(200);
+        courseBodies.addAll(rows);
+        this.map.put(userName + "|" + cookie,courseBodies);
+        return rows;
     }
+
+
 
     @Override
     public void studyAll(ArrayList<CourseBody> ids, String userName) throws Exception {
@@ -118,6 +127,28 @@ public class StudyServiceImpl implements StudyService {
 
         log.info("所有课程学习完毕");
 
+    }
+
+
+    // 给定时任务调用
+    public void doRequest() {
+
+        //所有的用户
+        ConcurrentHashMap.KeySetView<String, ArrayBlockingQueue<CourseBody>> strings = this.map.keySet();
+
+        for (String string : strings) { // 每次调度 ， 给每个用户上30节课
+            int num = 0 ;
+            while (num < 30) {
+                ArrayBlockingQueue<CourseBody> courseBodies = this.map.get(string);
+                // 去拿 拿不到就返回null
+                CourseBody courseBody = courseBodies.poll();
+                if (courseBody == null) break;
+                String id = courseBody.getId();
+                String url = this.urlWatch + id;
+                // 发请求访问
+                num++;
+            }
+        }
     }
 
 

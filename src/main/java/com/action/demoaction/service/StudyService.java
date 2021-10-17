@@ -31,6 +31,7 @@ public interface StudyService {
      */
     List<CourseBody> getCourseIds(String courseName, String courseNo, String userName) throws Exception;
 
+
     /**
      * 学习
      * @param ids
