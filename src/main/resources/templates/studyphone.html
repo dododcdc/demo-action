@@ -17,6 +17,7 @@
     }
 
     .study-containe {
+      /*border: 5px solid red;*/
       margin: 0;padding: 0;
       width: 100%;
       height: 100%;
@@ -49,7 +50,7 @@
 
     .xdForm{
 
-      margin:500px 100px 100px 100px;
+      margin:250px 100px 100px 100px;
 
     }
 
@@ -79,6 +80,18 @@
     <mt-field label="学号" placeholder="请输入学号" v-model="xdForm.userName"></mt-field>
 
     <mt-field label="密码" placeholder="请输入密码" type="password" v-model="xdForm.password"></mt-field>
+    <mt-radio
+            title="上课模式"
+            v-model="studyType"
+            :options="options">
+    </mt-radio>
+    <div style="color: #f44336">
+      <h4>提示</h4>
+      <h5>
+      all: 点击开始上课后，任务直接启动，一次性上完所有课，任务串行执行，上完所有课大概需要20分钟 <br />
+      stage: 点击开始上课后,先上30节课，后续每天上30节课，更加真实的上课模式
+      </h5>
+    </div>
 
     <mt-button type="primary" size="large" @click="submitForm('xdFrom')">开始上课</mt-button>
 
@@ -151,7 +164,18 @@
       msg: '自动上课任务已经提交，请耐心等待',
       studyStatus: '还未开始',
       caidan: false,
-      rangeValue: 20
+      rangeValue: 20,
+      studyType:'0',
+      options : [
+        {
+          label: 'all',
+          value: '0'
+        },
+        {
+          label: 'stage',
+          value: '1'
+        }
+      ]
     },
 
     methods: {
@@ -164,7 +188,10 @@
         const rLoading = this.openLoading();
         // 本地调试地址 还是没明白放到服务器上为什么不能用这个地址
         // const url = "http://localhost:8081/study";
-        const url = '/study'
+        let url = '/study'
+        if (this.studyType === '1') {
+          url = '/studyJob'
+        }
         // linux 服务器地址
         // const url = "https://goodbin.cn/study";
         // const url = "http://157.52.184.158:8081/study";

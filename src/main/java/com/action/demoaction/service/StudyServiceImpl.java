@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -38,10 +40,6 @@ public class StudyServiceImpl implements StudyService {
 
 
     private Map<String, String> cookies = new HashMap<>();
-
-    // 存储userName cookie  课程id的拼接值
-    private final ArrayBlockingQueue<String> ucids = new ArrayBlockingQueue<>(1000);
-
 
     private final ConcurrentHashMap<String,ArrayBlockingQueue<CourseBody>> map = new ConcurrentHashMap<>();
 
@@ -95,16 +93,28 @@ public class StudyServiceImpl implements StudyService {
                 + "&field=id,courseName,coursePointNo,";
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
         Course course = restTemplate.postForObject(this.urlCourse + tmp, request, Course.class);
-        //TODO 拼接userName + cookie + id 放入容器中
         List<CourseBody> rows = course.getRows();
-        ArrayBlockingQueue<CourseBody> courseBodies = new ArrayBlockingQueue<CourseBody>(200);
-        courseBodies.addAll(rows);
-        this.map.put(userName + "|" + cookie,courseBodies);
         return rows;
     }
 
+    @Override
+    public void saveIds(String userName) throws Exception{
+        List<XukeBody> xukes = getXukes(userName);
+        String cookie = this.cookies.get(userName);
+        ArrayBlockingQueue ids = new ArrayBlockingQueue<CourseBody>(500);
+        for (XukeBody xuke : xukes) {
+
+            List<CourseBody> courseIds = getCourseIds(xuke.getCourseName(), xuke.getCourseNo(), userName);
+
+            ids.addAll(courseIds);
+
+        }
+        this.map.put(userName+"|"+cookie,ids);
+
+    }
 
 
+    @Async
     @Override
     public void studyAll(ArrayList<CourseBody> ids, String userName) throws Exception {
         String cookie = this.cookies.get(userName);
@@ -129,27 +139,53 @@ public class StudyServiceImpl implements StudyService {
 
     }
 
+    @Override
+    public Map getMap()  {
+        return this.map;
+    }
 
     // 给定时任务调用
-    public void doRequest() {
+
+    @Async
+    @Scheduled(cron = "0 0 9 * * ?")
+//    @Scheduled(fixedDelay = 5000)
+    @Override
+    public void doJob() {
 
         //所有的用户
         ConcurrentHashMap.KeySetView<String, ArrayBlockingQueue<CourseBody>> strings = this.map.keySet();
+        if (strings.size() < 1) {
+            log.info("当前没有任务");
+            return;
+        }
 
-        for (String string : strings) { // 每次调度 ， 给每个用户上30节课
+        for (String user : strings) {
+            ArrayBlockingQueue<CourseBody> courseBodies = this.map.get(user);
+            // 如果这个用户没有，直接跳到下一个用户
+            if (courseBodies==null || courseBodies.size()==0) continue;
             int num = 0 ;
+
+            String[] split = user.split("\\|");
+            String cookie = split[1];
+            String userName = split[0];
+            // 每次调度 ， 给每个用户上30节课
             while (num < 30) {
-                ArrayBlockingQueue<CourseBody> courseBodies = this.map.get(string);
-                // 去拿 拿不到就返回null
                 CourseBody courseBody = courseBodies.poll();
                 if (courseBody == null) break;
                 String id = courseBody.getId();
                 String url = this.urlWatch + id;
-                // 发请求访问
-                num++;
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.set(HttpHeaders.COOKIE, cookie);
+                HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
+                ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
+                log.info("\n"+ ++num + "链接->>"+url+ "\n返回结果\n"+ent);
+                log.info( userName + "->" + courseBody.getCourseName() + courseBody.getCoursePointNo() + "完毕");
             }
+
+            Integer res = AppConstent.COURSED.getOrDefault(userName, 0);
+            AppConstent.COURSED.put(userName,res + num);
+            log.info(userName + "还有" + courseBodies.size() +"节课未上");
         }
     }
-
-
 }

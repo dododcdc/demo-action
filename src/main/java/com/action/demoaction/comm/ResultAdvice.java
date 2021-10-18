@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResultAdvice implements ResponseBodyAdvice<Object>  {
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
+        // BookAction 这个类下面的都会调用 下面的beforeBodyWrite
         if("com.action.demoaction.advice.BookAction".equals(methodParameter.getMethod().getDeclaringClass().getName())){
             return true;
         }else{

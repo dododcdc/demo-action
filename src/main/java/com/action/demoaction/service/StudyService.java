@@ -5,6 +5,7 @@ import com.action.demoaction.comm.httpres.XukeBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface StudyService {
 
@@ -24,10 +25,13 @@ public interface StudyService {
     List<XukeBody> getXukes(String userName) throws Exception;
 
     /**
-     * 根据学科获取该学科下所有的课程Id
+     *
      * @param courseName
      * @param courseNo
+     * @param userName
+
      * @return
+     * @throws Exception
      */
     List<CourseBody> getCourseIds(String courseName, String courseNo, String userName) throws Exception;
 
@@ -37,5 +41,12 @@ public interface StudyService {
      * @param ids
      */
     void studyAll(ArrayList<CourseBody> ids, String userName)  throws Exception;
+
+    void saveIds(String userName) throws Exception;
+
+    void doJob();
+
+    Map getMap();
+
 
 }

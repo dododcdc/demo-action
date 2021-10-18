@@ -9,4 +9,7 @@ public class AppConstent {
 
     public final static Map<String, StudyStatus> STATUS = new HashMap<>();
 
+    public final static Map<String,Integer> COURSED = new HashMap<>();
+
+
 }
