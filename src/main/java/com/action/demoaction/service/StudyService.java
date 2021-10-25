@@ -37,16 +37,18 @@ public interface StudyService {
 
 
     /**
-     * 学习
+     * 学习 一次学完
      * @param ids
      */
     void studyAll(ArrayList<CourseBody> ids, String userName)  throws Exception;
 
     void saveIds(String userName) throws Exception;
 
+    /**
+     * 学习 分批次学完
+     */
     void doJob();
 
-    Map getMap();
 
 
 }

@@ -1,4 +1,4 @@
-package com.action.demoaction.config;
+package com.action.demoaction.comm;
 
 import com.action.demoaction.comm.StudyStatus;
 

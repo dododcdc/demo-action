@@ -5,7 +5,7 @@ import com.action.demoaction.comm.httpres.Course;
 import com.action.demoaction.comm.httpres.CourseBody;
 import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
-import com.action.demoaction.config.AppConstent;
+import com.action.demoaction.comm.AppConstent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -136,13 +136,8 @@ public class StudyServiceImpl implements StudyService {
         AppConstent.STATUS.put(userName, StudyStatus.STARTED);
 
         log.info("所有课程学习完毕");
-
     }
 
-    @Override
-    public Map getMap()  {
-        return this.map;
-    }
 
     // 给定时任务调用
 

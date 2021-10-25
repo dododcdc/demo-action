@@ -1,13 +1,12 @@
-package com.action.demoaction;
+package com.action.demoaction.controller;
 
 
 import com.action.demoaction.comm.CommResult;
 import com.action.demoaction.comm.StudyStatus;
 import com.action.demoaction.comm.User;
 import com.action.demoaction.comm.httpres.CourseBody;
-import com.action.demoaction.comm.httpres.Xuke;
 import com.action.demoaction.comm.httpres.XukeBody;
-import com.action.demoaction.config.AppConstent;
+import com.action.demoaction.comm.AppConstent;
 import com.action.demoaction.service.StudyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Slf4j
 @RestController
@@ -27,7 +23,6 @@ public class StudyAction {
 
     @Autowired
     StudyService studyService;
-    //todo  该接口只负责将课程id（把cookie也带上，每个人登录的cookie不一样）找到添加到一个list中，设置一个线程，只要list不为空就去除课程id去访问
 
     /**
      * 开始学习
@@ -113,6 +108,7 @@ public class StudyAction {
     }
 
     /**
+     * 该接口废弃，不做状态查询
      * 查询学习状态 前端定时任务每隔一秒调用一次
      *
      * @param userName
