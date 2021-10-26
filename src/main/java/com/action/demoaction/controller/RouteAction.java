@@ -14,9 +14,15 @@ public class RouteAction {
         return "study";
     }
 
-    @GetMapping("/xdp")
+    @GetMapping("/xdpold")
     public String xdp() {
         return "studyphone";
     }
+
+    @GetMapping("/xdp")
+    public String learn() {
+        return "learn";
+    }
+
 
 }

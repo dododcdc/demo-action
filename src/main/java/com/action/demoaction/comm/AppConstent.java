@@ -1,7 +1,5 @@
 package com.action.demoaction.comm;
 
-import com.action.demoaction.comm.StudyStatus;
-
 import java.util.HashMap;
 import java.util.Map;
 

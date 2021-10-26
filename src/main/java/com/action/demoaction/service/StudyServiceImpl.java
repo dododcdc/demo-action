@@ -124,7 +124,7 @@ public class StudyServiceImpl implements StudyService {
         int num = 0;
         for (CourseBody courseBody : ids) {
             log.info("学号: " + userName + "总共有" + ids.size() + " 个课程");
-            log.info( ++num + courseBody.getCourseName() + courseBody.getCoursePointNo() + "开始");
+            log.info( ++num + "-> 学号:" + userName +  courseBody.getCourseName() + courseBody.getCoursePointNo() + "开始");
             String url = this.urlWatch + courseBody.getId();
             ResponseEntity<String> ent = restTemplate.postForEntity(url, request, String.class);
             log.info(num + courseBody.getCourseName()+courseBody.getCoursePointNo() + "链接--" + url + "\n" + ent);
@@ -135,7 +135,7 @@ public class StudyServiceImpl implements StudyService {
         // 将学习状态更新
         AppConstent.STATUS.put(userName, StudyStatus.STARTED);
 
-        log.info("所有课程学习完毕");
+        log.info("学号："+userName+ "总共" +ids.size() + "节课程学习完毕");
     }
 
 

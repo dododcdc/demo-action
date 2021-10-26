@@ -1,6 +1,5 @@
 package com.action.demoaction.controller;
 
-
 import com.action.demoaction.comm.CommResult;
 import com.action.demoaction.comm.StudyStatus;
 import com.action.demoaction.comm.User;
@@ -82,10 +81,8 @@ public class StudyAction {
             e.printStackTrace();
             return CommResult.fail("服务器异常");
         }
-
         return CommResult.success("自动上课任务已经提交,请耐心等待,该程序不返回执行状态,稍后自己去西电学习平台查看是否已经成功");
     }
-
 
     @PostMapping("/studyJob")
     public CommResult studyJob(@RequestBody User user) {
