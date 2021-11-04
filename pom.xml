@@ -46,11 +46,11 @@
             <version>2.0.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.github.dododcdc</groupId>
-            <artifactId>wbrepl-spring-boot-starter</artifactId>
-            <version>1.0.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.github.dododcdc</groupId>-->
+<!--            <artifactId>wbrepl-spring-boot-starter</artifactId>-->
+<!--            <version>1.0.1</version>-->
+<!--        </dependency>-->
 
 
 
