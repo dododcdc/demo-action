@@ -18,9 +18,9 @@
     </properties>
     <repositories>
         <repository>
-            <id>jcenter</id>
+            <id>repl</id>
             <name>jcenter aliyun</name>
-            <url>https://maven.aliyun.com/repository/public</url>
+            <url>https://repo1.maven.org/maven2/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -53,8 +53,6 @@
 <!--        </dependency>-->
 
 
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -67,6 +65,11 @@
             <version>1.18.12</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.dododcdc</groupId>
+            <artifactId>wbrepl-spring-boot-starter</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 
     </dependencies>
 
