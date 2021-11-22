@@ -93,6 +93,7 @@ public class StudyServiceImpl implements StudyService {
                 + "&field=id,courseName,coursePointNo,";
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(null, headers);
         Course course = restTemplate.postForObject(this.urlCourse + tmp, request, Course.class);
+        if (course == null) return new ArrayList<>();
         List<CourseBody> rows = course.getRows();
         return rows;
     }
