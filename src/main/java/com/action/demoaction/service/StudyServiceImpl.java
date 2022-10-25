@@ -29,14 +29,18 @@ public class StudyServiceImpl implements StudyService {
     @Autowired
     RestTemplate restTemplate;
 
+// http://snce.xidian.edu.cn/learning/loginController.do?login
+//    private final String urlLogin = "http://www.xdwy.com.cn/learning/loginController.do?checkuser";
+    private final String urlLogin = "http://snce.xidian.edu.cn/learning/loginController.do?checkuser";
 
-    private final String urlLogin = "http://www.xdwy.com.cn/learning/loginController.do?checkuser";
+    //private final String urlXuke = "http://www.xdwy.com.cn/learning/yTeachOutlineController.do?datagridStuStudy&sysType=1&field=id,createName,createBy,createDate,updateName,updateBy,updateDate,useTime,courseNo,courseName,courseForm,examForm,mainTeacherName,assistTeacherName,answerTeacherName,";
+    private final String urlXuke = "http://snce.xidian.edu.cn/learning/yTeachOutlineController.do?datagridStuStudy&sysType=1&field=id,createName,createBy,createDate,updateName,updateBy,updateDate,useTime,courseNo,courseName,courseForm,examForm,mainTeacherName,assistTeacherName,answerTeacherName,";
 
-    private final String urlXuke = "http://www.xdwy.com.cn/learning/yTeachOutlineController.do?datagridStuStudy&sysType=1&field=id,createName,createBy,createDate,updateName,updateBy,updateDate,useTime,courseNo,courseName,courseForm,examForm,mainTeacherName,assistTeacherName,answerTeacherName,";
+//    private final String urlCourse = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do";
+    private final String urlCourse = "http://snce.xidian.edu.cn/learning/yCourseKnowledgeController.do";
 
-    private final String urlCourse = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do";
-
-    private final String urlWatch = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do?yCourseKnowledgeStudy&id=";
+//    private final String urlWatch = "http://www.xdwy.com.cn/learning/yCourseKnowledgeController.do?yCourseKnowledgeStudy&id=";
+    private final String urlWatch = "http://snce.xidian.edu.cn/learning/yCourseKnowledgeController.do?yCourseKnowledgeStudy&id=";
 
 
     private Map<String, String> cookies = new HashMap<>();
